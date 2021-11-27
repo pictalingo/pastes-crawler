@@ -1,0 +1,2 @@
+*/2 * * * * /usr/local/bin/python /code/finder.py >> /var/log/cron.log 2>&1
+*/5 * * * * /usr/local/bin/python /code/extender.py >> /var/log/cron.log 2>&1

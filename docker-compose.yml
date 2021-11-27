@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+
+    mongodb:
+        image: mongo:5.0.4
+        container_name: mongodb
+        restart: unless-stopped
+        env_file: .env
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: $MONGO_USER
+            MONGO_INITDB_ROOT_PASSWORD: $MONGO_PASSWORD
+            MONGO_INITDB_DATABASE: $MONGO_DB
+            MONGO_COLLECTION: $MONGO_COLLECTION
+            MONGODB_DATA_DIR: /data/db
+            MONDODB_LOG_DIR: /dev/null
+        volumes:
+            - mongodbdata:/data/db
+        ports:
+            -   "27017:27017"
+        networks:
+            - crawler-network
+
+    crawler:
+        image: crawler:latest
+        container_name: crawler
+        build: .
+        restart: unless-stopped
+        environment:
+            TINYDB_URL: /code/tinydb/db.json
+            MONGO_DB: $MONGO_DB
+            MONGO_COLLECTION: $MONGO_COLLECTION
+            MONGO_USER: $MONGO_USER
+            MONGO_PASSWORD: $MONGO_PASSWORD
+        volumes:
+            - tinydb:/code/tinydb
+        networks:
+            - crawler-network
+
+
+volumes:
+    mongodbdata:
+    tinydb:
+
+networks:
+    crawler-network:
+        driver: bridge

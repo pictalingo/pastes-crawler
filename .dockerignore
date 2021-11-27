@@ -1,0 +1,6 @@
+Dockerfile
+.venv
+.idea
+db.json
+docker-compose.yml
+.env
